@@ -5,7 +5,8 @@
     "license": "private",
     "homepage": "http://www.vrok.de/",
     "keywords": ["supervisor", "supervisord", "zend", "zf2"],
-"minimum-stability": "dev",
+    "minimum-stability": "dev",
+
     "require": {
         "php": ">=5.4",
         "mondalaci/supervisor-client": "*@dev",
