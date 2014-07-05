@@ -1,0 +1,19 @@
+{
+    "name": "vrok/supervisor-control",
+    "description": "ZF2 Module for supervisord management",
+    "type": "library",
+    "license": "private",
+    "homepage": "http://www.vrok.de/",
+    "keywords": ["supervisor", "supervisord", "zend", "zf2"],
+
+    "require": {
+        "php": ">=5.4",
+        "mondalaci/supervisor-client": "dev-master",
+        "zendframework/zendframework": "~2.3.1"
+    },
+    "autoload": {
+        "psr-0": {
+            "SupervisorControl": "src/"
+        }
+    }
+}
