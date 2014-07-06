@@ -15,16 +15,20 @@ use Zend\Form\Form;
 class ConfirmationForm extends Form
 {
     /**
-     * Creates the CSRF protection and the confirmation button.
+     * Construct the form and add the fields.
+     *
+     * @param array $options
      */
-    public function prepare()
+    public function __construct($options = array())
     {
+        parent::__construct('supervisor-confirm', $options);
+
         $this->add(array(
             'type'    => 'Zend\Form\Element\Csrf',
             'name'    => 'csrfConfirm',
             'options' => array(
                 'csrf_options' => array(
-                    'timeout' => 600,
+                    'timeout' => 10,
                 ),
             ),
         ));
@@ -36,7 +40,5 @@ class ConfirmationForm extends Form
                 'value' => 'Confirm',
             )
         ));
-
-        parent::prepare();
     }
 }
