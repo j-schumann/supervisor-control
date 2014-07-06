@@ -1,0 +1,16 @@
+<h2>Supervisor-Control</h2>
+
+<p>
+    Do you really want to stop all processes of group "<?php echo $this->name; ?>"?<br />
+    This stops all those processes & waits for each process to be fully stopped.
+</p>
+
+<?php
+    $this->form->setAttribute('action', $this->url('supervisor/stopgroup', array('name' => $this->name)));
+    $this->form->prepare();
+
+    echo $this->form()->openTag($this->form);
+    echo $this->formElementErrors($this->form->get('csrfConfirm'));
+    echo $this->formElement($this->form->get('csrfConfirm'));
+    echo $this->formElement($this->form->get('confirm'));
+    echo $this->form()->closeTag();

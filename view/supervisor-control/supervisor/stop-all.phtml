@@ -1,0 +1,17 @@
+<h2>Supervisor-Control</h2>
+
+<p>
+    Do you really want to stop all processes?<br />
+    This stops all processes in the process list & waits for each process to be fully
+    stopped.
+</p>
+
+<?php
+    $this->form->setAttribute('action', $this->url('supervisor/stopall'));
+    $this->form->prepare();
+
+    echo $this->form()->openTag($this->form);
+    echo $this->formElementErrors($this->form->get('csrfConfirm'));
+    echo $this->formElement($this->form->get('csrfConfirm'));
+    echo $this->formElement($this->form->get('confirm'));
+    echo $this->form()->closeTag();

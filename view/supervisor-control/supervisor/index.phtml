@@ -1,0 +1,36 @@
+<h2>Supervisor-Control</h2>
+
+<?php
+    echo $this->flashMessenger()->render('error');
+    echo $this->flashMessenger()->render('success');
+?>
+<p>
+    Supervisor (Version: <?php echo $this->version; ?>)
+    reports state <b><?php echo $this->state['statename']; ?></b><br />
+    <br />
+    <a class="button" href="<?php echo $this->url('supervisor/restart'); ?>" title="Restart"
+        >Restart Daemon</a>
+    <a class="button" href="<?php echo $this->url('supervisor/startall'); ?>" title="Start all processes"
+        >Start all processes</a>
+    <a class="button" href="<?php echo $this->url('supervisor/stopall'); ?>" title="Stop all processes"
+        >Stop all processes</a>
+</p>
+
+<h3>Twiddler</h3>
+<p>
+    Twiddler <?php echo $this->twiddlerSupport ? 'is' : 'is not'; ?> supported.
+    <?php
+    // @todo twiddler support for editing and reloading config
+    ?>
+</p>
+
+<h3>Program Groups</h3>
+<?php foreach($this->groups as $group) : ?>
+    <p>
+        Name: <a href="<?php echo $this->url('supervisor/group', array('name' => $group['name'])); ?>" title="Group details">
+            <?php echo $group['name']; ?>
+        </a><br />
+        Used: <?php echo $group['inuse'] ? 'yes' : 'no'; ?><br />
+        Priority: <?php echo $group['priority']; ?><br />
+    </p>
+<?php endforeach;

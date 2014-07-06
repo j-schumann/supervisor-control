@@ -1,0 +1,15 @@
+<h2>Supervisor-Control</h2>
+
+<p>
+    Do you really want to stop the process "<?php echo $this->name; ?>"?
+</p>
+
+<?php
+    $this->form->setAttribute('action', $this->url('supervisor/stopprocess', array('name' => $this->name)));
+    $this->form->prepare();
+
+    echo $this->form()->openTag($this->form);
+    echo $this->formElementErrors($this->form->get('csrfConfirm'));
+    echo $this->formElement($this->form->get('csrfConfirm'));
+    echo $this->formElement($this->form->get('confirm'));
+    echo $this->form()->closeTag();

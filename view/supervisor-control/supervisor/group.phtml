@@ -1,0 +1,41 @@
+<h2>Program group "<?php echo $this->name; ?>"</h2>
+
+<?php
+    echo $this->flashMessenger()->render('error');
+    echo $this->flashMessenger()->render('success');
+?>
+<p>
+    Used: <?php echo $this->group['inuse'] ? 'yes' : 'no'; ?><br />
+    Priority: <?php echo $this->group['priority']; ?><br />
+    <br />
+    <a class="button" href="<?php echo $this->url('supervisor/startgroup', array('name' => $this->group['name'])); ?>" title="Start all processes"
+        >Start all group processes</a>
+    <a class="button" href="<?php echo $this->url('supervisor/stopgroup', array('name' => $this->group['name'])); ?>" title="Stop all processes"
+        >Stop all group processes</a>
+</p>
+
+
+<?php foreach($this->group['processes'] as $key => $process) : ?>
+    <h4>Process <?php echo $process['name']; ?></h4>
+    <p>
+        State: <b><?php echo $process['info']['statename'].'</b>, '.$process['info']['description']; ?><br />
+        Autostart: <?php echo $process['autostart'] ? 'yes' : 'no'; ?><br />
+        Priority: <?php echo $process['priority']; ?><br />
+        Last start: <?php echo $this->dateFormat($process['info']['start'],
+                    \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM); ?><br />
+        Last Stop: <?php echo $this->dateFormat($process['info']['stop'],
+                    \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM); ?><br />
+        Stdout log: <?php echo $process['info']['stdout_logfile']; ?><br />
+        Stderr log: <?php echo $process['info']['stderr_logfile']; ?><br />
+        Exit status: <?php echo $process['info']['exitstatus']; ?><br />
+        Spawn error: <?php echo $process['info']['spawnerr'] ?: 'n/a'; ?><br />
+        <br />
+        <a class="button" href="<?php echo $this->url('supervisor/startprocess', array('name' => $process['name'])); ?>" title="Start process"
+            >Start processes</a>
+        <a class="button" href="<?php echo $this->url('supervisor/stopprocess', array('name' => $process['name'])); ?>" title="Stop process"
+            >Stop processes</a>
+    </p>
+<?php endforeach; ?>
+
+<a class="button" href="<?php echo $this->url('supervisor'); ?>" title="Overview"
+    >Goto overview</a>

@@ -1,0 +1,20 @@
+<h2>Supervisor-Control</h2>
+
+<p>
+    Do you really want to restart the Supervisor process?<br />
+    This soft restarts the Supervisor daemon. If any processes are running, they are
+    automatically killed without warning. Note that the actual UNIX process for
+    Supervisor cannot restart; only Supervisor’s main program loop. This has the effect of
+    resetting the internal states of Supervisor.  Unlike most other methods, if Supervisor
+    is in the FATAL state, this will still function.
+</p>
+
+<?php
+    $this->form->setAttribute('action', $this->url('supervisor/restart'));
+    $this->form->prepare();
+
+    echo $this->form()->openTag($this->form);
+    echo $this->formElementErrors($this->form->get('csrfConfirm'));
+    echo $this->formElement($this->form->get('csrfConfirm'));
+    echo $this->formElement($this->form->get('confirm'));
+    echo $this->form()->closeTag();
