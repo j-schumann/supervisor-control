@@ -14,21 +14,20 @@
         >Stop all group processes</a>
 </p>
 
-
 <?php foreach($this->group['processes'] as $key => $process) : ?>
     <h4>Process <?php echo $process['name']; ?></h4>
     <p>
-        State: <b><?php echo $process['info']['statename'].'</b>, '.$process['info']['description']; ?><br />
+        State: <b><?php echo $this->group['infos'][$process['name']]['statename'].'</b>, '.$this->group['infos'][$process['name']]['description']; ?><br />
         Autostart: <?php echo $process['autostart'] ? 'yes' : 'no'; ?><br />
         Priority: <?php echo $process['priority']; ?><br />
-        Last start: <?php echo $this->dateFormat($process['info']['start'],
+        Last start: <?php echo $this->dateFormat($this->group['infos'][$process['name']]['start'],
                     \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM); ?><br />
-        Last Stop: <?php echo $this->dateFormat($process['info']['stop'],
+        Last Stop: <?php echo $this->dateFormat($this->group['infos'][$process['name']]['stop'],
                     \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM); ?><br />
-        Stdout log: <?php echo $process['info']['stdout_logfile']; ?><br />
-        Stderr log: <?php echo $process['info']['stderr_logfile']; ?><br />
-        Exit status: <?php echo $process['info']['exitstatus']; ?><br />
-        Spawn error: <?php echo $process['info']['spawnerr'] ?: 'n/a'; ?><br />
+        Stdout log: <?php echo $this->group['infos'][$process['name']]['stdout_logfile']; ?><br />
+        Stderr log: <?php echo $this->group['infos'][$process['name']]['stderr_logfile']; ?><br />
+        Exit status: <?php echo $this->group['infos'][$process['name']]['exitstatus']; ?><br />
+        Spawn error: <?php echo $this->group['infos'][$process['name']]['spawnerr'] ?: 'n/a'; ?><br />
         <br />
         <a class="button" href="<?php echo $this->url('supervisor/startprocess', array('name' => $process['name'])); ?>" title="Start process"
             >Start processes</a>

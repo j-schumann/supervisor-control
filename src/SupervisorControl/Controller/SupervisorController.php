@@ -7,7 +7,6 @@
 
 namespace SupervisorControl\Controller;
 
-use SupervisorClient\SupervisorClient;
 use SupervisorControl\Form\ConfirmationForm;
 use Zend\Mvc\Controller\AbstractActionController;
 
@@ -18,51 +17,20 @@ use Zend\Mvc\Controller\AbstractActionController;
 class SupervisorController extends AbstractActionController
 {
     /**
-     * Parses the result of supervisor.getAllConfigInfo to bundle by group.
-     *
-     * @param \SupervisorClient\SupervisorClient $client
-     * @return array
-     */
-    protected function getGroupConfig(SupervisorClient $client)
-    {
-        $groups = array();
-        $config = $client->getAllConfigInfo();
-
-        foreach($config as $process) {
-            if (!isset($groups[$process['group']])) {
-                $groups[$process['group']] = array(
-                    'name'      => $process['group'],
-                    'priority'  => $process['group_prio'],
-                    'inuse'     => $process['inuse'],
-                    'processes' => array(),
-                );
-            }
-
-            $groups[$process['group']]['processes'][$process['name']] = array(
-                'name'      => $process['name'],
-                'priority'  => $process['process_prio'],
-                'autostart' => $process['autostart'],
-            );
-        }
-
-        return $groups;
-    }
-
-    /**
      * Shows the overall supervisord status and the configured program groups.
      *
      * @return array
      */
     public function indexAction()
     {
-        $client = $this->getServiceLocator()->get('SupervisorClient\SupervisorClient');
-        /* @var $client \SupervisorClient\SupervisorClient */
+        $client = $this->getServiceLocator()->get('SupervisorClient');
+        /* @var $client \SupervisorControl\Client\SupervisorClient */
 
         return array(
             'state'            => $client->getState(),
             'version'          => $client->getSupervisorVersion(),
             'twiddlerSupport'  => $client->isTwiddlerAvailable(),
-            'groups'           => $this->getGroupConfig($client),
+            'groups'           => $client->getGroupConfig($client),
         );
     }
 
@@ -82,9 +50,10 @@ class SupervisorController extends AbstractActionController
             );
         }
 
-        $client = $this->getServiceLocator()->get('SupervisorClient\SupervisorClient');
-        /* @var $client \SupervisorClient\SupervisorClient */
+        $client = $this->getServiceLocator()->get('SupervisorClient');
+        /* @var $client \SupervisorControl\Client\SupervisorClient */
         $client->restart();
+
         $this->flashMessenger()->addSuccessMessage('Restart command sent!');
         return $this->redirect()->toRoute('supervisor');
     }
@@ -96,9 +65,10 @@ class SupervisorController extends AbstractActionController
      */
     public function startallAction()
     {
-        $client = $this->getServiceLocator()->get('SupervisorClient\SupervisorClient');
-        /* @var $client \SupervisorClient\SupervisorClient */
+        $client = $this->getServiceLocator()->get('SupervisorClient');
+        /* @var $client \SupervisorControl\Client\SupervisorClient */
         $client->startAllProcesses();
+
         $this->flashMessenger()->addSuccessMessage('All processes started!');
         return $this->redirect()->toRoute('supervisor');
     }
@@ -119,8 +89,9 @@ class SupervisorController extends AbstractActionController
             );
         }
 
-        $client = $this->getServiceLocator()->get('SupervisorClient\SupervisorClient');
-        /* @var $client \SupervisorClient\SupervisorClient */
+        $client = $this->getServiceLocator()->get('SupervisorClient');
+        /* @var $client \SupervisorControl\Client\SupervisorClient */
+
         $client->stopAllProcesses();
         $this->flashMessenger()->addSuccessMessage('All processes stopped!');
         return $this->redirect()->toRoute('supervisor');
@@ -134,32 +105,17 @@ class SupervisorController extends AbstractActionController
     public function groupAction()
     {
         $name = $this->params('name');
-        $client = $this->getServiceLocator()->get('SupervisorClient\SupervisorClient');
-        /* @var $client \SupervisorClient\SupervisorClient */
+        $client = $this->getServiceLocator()->get('SupervisorClient');
+        /* @var $client \SupervisorControl\Client\SupervisorClient */
 
-        $groups = $this->getGroupConfig($client);
+        $groups = $client->getGroupConfig($client);
         if (!isset($groups[$name])) {
             $this->flashMessenger()->addErrorMessage('Group "'.$name.'" not found!');
             return $this->redirect()->toRoute('supervisor');
         }
 
-        // find the processInfo for each of the groups processes
-
-        // @todo: we do not use $client->getProcessInfo() as it fails with BAD_NAME
-        // when the group uses the "numprocs" setting and the processes are named
-        // "programmgroup-00", "programmgroup-01", ...
-        // @link https://github.com/Supervisor/supervisor/issues/454
-        // Also this would require multiple API calls, getAllProcessInfo is only one.
         $group = $groups[$name];
-        $processInfo = $client->getAllProcessInfo();
-        foreach($group['processes'] as $process) {
-            foreach($processInfo as $info) {
-                if ($info['name'] === $process['name']) {
-                    $group['processes'][$process['name']]['info'] = $info;
-                    break;
-                }
-            }
-        }
+        $group['infos'] = $client->getProcessInfos(array_keys($group['processes']));
 
         return array(
             'name'  => $name,
@@ -176,8 +132,8 @@ class SupervisorController extends AbstractActionController
     {
         $name = $this->params('name');
 
-        $client = $this->getServiceLocator()->get('SupervisorClient\SupervisorClient');
-        /* @var $client \SupervisorClient\SupervisorClient */
+        $client = $this->getServiceLocator()->get('SupervisorClient');
+        /* @var $client \SupervisorControl\Client\SupervisorClient */
 
         try {
             $client->startProcessGroup($name);
@@ -210,8 +166,8 @@ class SupervisorController extends AbstractActionController
             );
         }
 
-        $client = $this->getServiceLocator()->get('SupervisorClient\SupervisorClient');
-        /* @var $client \SupervisorClient\SupervisorClient */
+        $client = $this->getServiceLocator()->get('SupervisorClient');
+        /* @var $client \SupervisorControl\Client\SupervisorClient */
 
         try {
             $client->stopProcessGroup($name);
@@ -235,8 +191,8 @@ class SupervisorController extends AbstractActionController
     {
         $name = $this->params('name');
 
-        $client = $this->getServiceLocator()->get('SupervisorClient\SupervisorClient');
-        /* @var $client \SupervisorClient\SupervisorClient */
+        $client = $this->getServiceLocator()->get('SupervisorClient');
+        /* @var $client \SupervisorControl\Client\SupervisorClient */
 
         try {
             $client->startProcess($name);
@@ -269,8 +225,8 @@ class SupervisorController extends AbstractActionController
             );
         }
 
-        $client = $this->getServiceLocator()->get('SupervisorClient\SupervisorClient');
-        /* @var $client \SupervisorClient\SupervisorClient */
+        $client = $this->getServiceLocator()->get('SupervisorClient');
+        /* @var $client \SupervisorControl\Client\SupervisorClient */
 
         try {
             $client->stopProcess($name);

@@ -7,7 +7,6 @@
 
 namespace SupervisorControl\Client;
 
-use SupervisorClient\SupervisorClient;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -19,8 +18,8 @@ class ClientServiceFactory implements FactoryInterface
     /**
      * Creates a client instance.
      *
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @return \SupervisorClient\SupervisorClient
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return SupervisorClient
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

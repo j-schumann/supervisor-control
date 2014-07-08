@@ -3,9 +3,26 @@
  * Supervisor-Control config
  */
 return array(
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'check-process' => array(
+                    'options' => array(
+                        'route' => 'check-process <name>',
+                        'defaults' => array(
+                            'controller' => 'SupervisorControl\Controller\Console',
+                            'action'     => 'check-process',
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
+
     'controllers' => array(
         'invokables' => array(
             'SupervisorControl\Controller\Supervisor'  => 'SupervisorControl\Controller\SupervisorController',
+            'SupervisorControl\Controller\Console'     => 'SupervisorControl\Controller\ConsoleController',
         ),
     ),
 
@@ -117,7 +134,7 @@ return array(
 
     'service_manager' => array(
         'factories' => array(
-            'SupervisorClient\SupervisorClient' => 'SupervisorControl\Client\ClientServiceFactory',
+            'SupervisorClient' => 'SupervisorControl\Client\ClientServiceFactory',
         ),
     ),
 
