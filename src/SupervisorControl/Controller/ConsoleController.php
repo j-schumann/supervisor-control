@@ -45,7 +45,8 @@ class ConsoleController extends AbstractActionController
                 'info'        => $info,
             ));
 
-            echo "process '$name' is running!\n";
+            // no output if everything is OK
+            //echo "process '$name' is running!\n";
         }
         else {
             $this->getEventManager()->trigger(self::EVENT_PROCESSNOTRUNNING, $client, array(
