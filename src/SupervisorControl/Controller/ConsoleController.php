@@ -29,30 +29,31 @@ class ConsoleController extends AbstractActionController
         /* @var $client \SupervisorControl\Client\SupervisorClient */
 
         $name = $this->params('name');
-        $isRunning = $client->processIsRunning($name);
-
-        $info = $client->getProcessInfos(array($name));
-        if (isset($info[$name])) {
-            $info = $info[$name];
-        }
-        else {
-            $info = false;
-        }
+        $isRunning = $client->isProcessRunning($name);
+        $info = $client->getProcessInfo($name);
 
         if ($isRunning) {
-            $this->getEventManager()->trigger(self::EVENT_PROCESSRUNNING, $client, array(
-                'processName' => $name,
-                'info'        => $info,
-            ));
+            $this->getEventManager()->trigger(
+                self::EVENT_PROCESSRUNNING,
+                $client,
+                array(
+                    'processName' => $name,
+                    'info'        => $info,
+                )
+            );
 
             // no output if everything is OK
             //echo "process '$name' is running!\n";
         }
         else {
-            $this->getEventManager()->trigger(self::EVENT_PROCESSNOTRUNNING, $client, array(
-                'processName' => $name,
-                'info'        => $info,
-            ));
+            $this->getEventManager()->trigger(
+                self::EVENT_PROCESSNOTRUNNING,
+                $client,
+                array(
+                    'processName' => $name,
+                    'info'        => $info,
+                )
+            );
 
             echo "process '$name' is NOT running!\n";
         }

@@ -30,17 +30,26 @@ Usage
 
 Entry route is /supervisor-control
 
+Notice: To use supervisor.getProcessInfo() with a program group that uses
+numprocs > 1 the full qualified name (FQN, "group:process") of a process
+is required:
+```
+[program:myprog]
+numprocs     = 2
+process_name = myprog-%(process_num)d
+````
+This will produce process names like myprog-0, myprog-1. When calling
+getProcessInfo("myprog-0") an exception with BAD_NAME will be thrown,
+use getProcessInfo("myprog:myprog-0") instead.
+This module overrides getProcessInfo to construct the FQN automatically before
+querying the API. The extended client functions getProcessConfig, processExists,
+getProcessState and isProcessRunning work when either the short name or FQN is
+given.
+
 Todo
 ----
-
-When a program group has "numprocs > 1" and "process_name = myprog-%(process_num)"
-set supervisor appends "-00", "-01" and so on to the process name.
-These names show up in the result of supervisor.getAllConfigInfo and
-supervisor.getAllProcessInfo but cannot be accessed by any process specific
-function, e.g. supervisor.getProcessInfo, it fails with BAD_NAME
--> https://github.com/Supervisor/supervisor/issues/454
 
 Adjust route constraints to allow all possible group/process names,
 [a-zA-Z0-9_-]+ is probably to restrictive.
 
-Implement twiddler support for modifying and reloading the configuration
+Implement twiddler support for modifying and reloading the configuration.

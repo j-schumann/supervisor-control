@@ -24,7 +24,7 @@ class SupervisorClient extends BaseClient
     const PROCESS_STATE_UNKNOWN   = 1000;
 
     /**
-     * Caches the result of getAllProcessInfo.
+     * Caches the result of getAllProcessInfo fetched by {@link getProcessInfos}
      *
      * @var array
      */
@@ -41,16 +41,18 @@ class SupervisorClient extends BaseClient
         $config = $this->getAllConfigInfo();
 
         foreach($config as $process) {
-            if (!isset($groups[$process['group']])) {
-                $groups[$process['group']] = array(
-                    'name'      => $process['group'],
+            $groupName = $process['group'];
+
+            if (!isset($groups[$groupName])) {
+                $groups[$groupName] = array(
+                    'name'      => $groupName,
                     'priority'  => $process['group_prio'],
                     'inuse'     => $process['inuse'],
                     'processes' => array(),
                 );
             }
 
-            $groups[$process['group']]['processes'][$process['name']] = array(
+            $groups[$groupName]['processes'][$process['name']] = array(
                 'name'      => $process['name'],
                 'priority'  => $process['process_prio'],
                 'autostart' => $process['autostart'],
@@ -61,6 +63,31 @@ class SupervisorClient extends BaseClient
     }
 
     /**
+     * Retrieves the config information for the given process (may be the short name
+     * or the FQN with the group name prefixed: "group:process")
+     *
+     * @param string $name
+     * @return array
+     */
+    public function getProcessConfig($name)
+    {
+        // the config only contains the name without the group prefix
+        $parts = explode(':', $name);
+        if (count($parts) == 2) {
+            $name = $parts[1];
+        }
+
+        $config = $this->getAllConfigInfo();
+        foreach($config as $process) {
+            if ($process['name'] === $name) {
+                return $process;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Checks if the given process exists in the configuration.
      *
      * @param string $name
@@ -68,31 +95,71 @@ class SupervisorClient extends BaseClient
      */
     public function processExists($name)
     {
-        $config = $this->getAllConfigInfo();
-        foreach($config as $process) {
-            if ($process['name'] === $name) {
-                return true;
-            }
+        return (bool)$this->getProcessConfig($name);
+    }
+
+    /**
+     * Retrieve the FQN for the given process.
+     * The FQN consists of "group:process" and must be used for program groups with
+     * numprocs > 0 or getProcessInfo() will fail.
+     *
+     * @param string $name
+     * @return string   the FQN or null if the process wasn't found in the config
+     */
+    public function getProcessFQN($name)
+    {
+        $parts = explode(':', $name);
+        if (count($parts) == 2) {
+            return $name;
         }
 
-        return false;
+        $config = $this->getProcessConfig($name);
+        if (!$config) {
+            return null;
+        }
+
+        return $config['group'].':'.$config['name'];
+    }
+
+    /**
+     * {@inheritdoc}
+     * Replaces a short name with the FQN ("group:process") before querying the API.
+     *
+     * @param string $processName
+     * @return array or null if the process was not found
+     */
+    public function getProcessInfo($processName)
+    {
+        $fqn = $this->getProcessFQN($processName);
+        if (!$fqn) {
+            return null;
+        }
+
+        return parent::getProcessInfo($fqn);
     }
 
     /**
      * Retrieves the state of the process given by its name.
      *
-     * @todo https://github.com/Supervisor/supervisor/issues/454
      * @param string $name
      * @return int  the process state or PROCESS_STATE_UNKNOWN if process not found
      */
     public function getProcessState($name)
     {
-        $infos = $this->getProcessInfos(array($name));
-        if (!isset($infos[$name])) {
+        $fqn = $this->getProcessFQN($name);
+        if (!$fqn) {
             return self::PROCESS_STATE_UNKNOWN;
         }
 
-        return (int)$infos[$name]['state'];
+        try {
+            $infos = $this->getProcessInfo($fqn);
+        }
+        catch(\Exception $e) {
+            // most probable reason is "BAD NAME"
+            return self::PROCESS_STATE_UNKNOWN;
+        }
+
+        return (int)$infos['state'];
     }
 
     /**
@@ -101,17 +168,18 @@ class SupervisorClient extends BaseClient
      * @param string $name  process name to check
      * @return boolean
      */
-    public function processIsRunning($name)
+    public function isProcessRunning($name)
     {
         $state = $this->getProcessState($name);
-        return ($state == self::PROCESS_STATE_RUNNING || $state == self::PROCESS_STATE_STARTING);
+        // @see https://github.com/Supervisor/supervisor/blob/master/supervisor/states.py
+        // RUNNING_STATES (BACKOFF is not optimal but listed there...)
+        return ($state == self::PROCESS_STATE_RUNNING
+                || $state == self::PROCESS_STATE_STARTING
+                || $state == self::PROCESS_STATE_BACKOFF);
     }
 
     /**
      * Retrieves the process information for multiple processes at once.
-     *
-     * Can be used to work around the supervisor API bug with getProcessInfo():
-     * @link https://github.com/Supervisor/supervisor/issues/454
      *
      * @param array $names  list of process names to fetch information for
      * @param bool $reload  set to true to force a reload of the information via RPC
@@ -125,6 +193,12 @@ class SupervisorClient extends BaseClient
 
         $infos = array();
         foreach ($names as $name) {
+            // the result only contains the name without the group prefix
+            $parts = explode(':', $name);
+            if (count($parts) == 2) {
+                $name = $parts[1];
+            }
+
             foreach($this->processInfo as $info) {
                 if ($info['name'] === $name) {
                     $infos[$name] = $info;
