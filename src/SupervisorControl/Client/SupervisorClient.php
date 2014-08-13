@@ -192,7 +192,6 @@ class SupervisorClient extends BaseClient
         }
         $infos = array();
         foreach ($names as $name) {
-        \Doctrine\Common\Util\Debug::dump($this->isProcessRunning($name), 4);
             // the result only contains the name without the group prefix
             $parts = explode(':', $name);
             if (count($parts) == 2) {
