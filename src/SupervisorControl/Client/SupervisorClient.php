@@ -190,9 +190,9 @@ class SupervisorClient extends BaseClient
         if ($reload || !$this->processInfo) {
             $this->processInfo = $this->getAllProcessInfo();
         }
-
         $infos = array();
         foreach ($names as $name) {
+        \Doctrine\Common\Util\Debug::dump($this->isProcessRunning($name), 4);
             // the result only contains the name without the group prefix
             $parts = explode(':', $name);
             if (count($parts) == 2) {
@@ -208,5 +208,43 @@ class SupervisorClient extends BaseClient
         }
 
         return $infos;
+    }
+    
+    /**
+     * Do a request to the supervisor XML-RPC API
+     *
+     * @param string $namespace The namespace of the request
+     * @param string $method The method in the namespace
+     * @param mixed $args Optional arguments
+     */
+    protected function _doRequest($namespace, $method, $args)
+    {
+        // Create the authorization header.
+        $authorization = '';
+        if (!is_null($this->_username) && !is_null($this->_password)) {
+            $authorization = "\r\nAuthorization: Basic " . base64_encode($this->_username . ':' . $this->_password);
+        }
+
+        $host = '';
+        // not an unix socket
+        if (strpos($this->_hostname, '/') === false) {
+            $host = $this->_hostname;
+
+            if ($this->_port != -1) {
+                $host .= ':' . $this->_port;
+            }
+        }
+
+        // Create the HTTP request.
+        $xml_rpc = \xmlrpc_encode_request("$namespace.$method", $args, array('encoding' => 'utf-8'));
+        $httpRequest = "POST /RPC2 HTTP/1.1\r\n" .
+            "Host: $host\r\n" .
+            "Content-Length: " . strlen($xml_rpc) .
+            $authorization .
+            "\r\n\r\n" .
+            $xml_rpc;
+
+        // Write the request to the socket.
+        fwrite($this->_getSocket(), $httpRequest);
     }
 }
