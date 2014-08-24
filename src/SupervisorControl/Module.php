@@ -7,32 +7,14 @@
 
 namespace SupervisorControl;
 
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
 /**
  * Module bootstrapping.
  */
 class Module implements
-    AutoloaderProviderInterface,
     ConfigProviderInterface
 {
-    /**
-     * Returns the autoloader definiton to use to load classes within this module.
-     *
-     * @return array
-     */
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__,
-                ),
-            ),
-        );
-    }
-
     /**
      * Returns the modules default configuration.
      *
