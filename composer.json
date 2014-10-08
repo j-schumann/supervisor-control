@@ -7,9 +7,9 @@
     "keywords": ["supervisor", "supervisord", "zend", "zf2"],
 
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.5",
         "mondalaci/supervisor-client": "dev-master",
-        "zendframework/zendframework": "~2.3.1"
+        "zendframework/zendframework": "~2.3.3"
     },
     "autoload": {
         "psr-0": {
