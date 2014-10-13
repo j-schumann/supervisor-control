@@ -59,7 +59,6 @@ return array(
                 'options' => array(
                     'route'    => '/supervisor-control/',
                     'defaults' => array(
-                        '__NAMESPACE__' => 'SupervisorControl\Controller',
                         'controller'    => 'SupervisorControl\Controller\Supervisor',
                         'action'        => 'index',
                     ),
