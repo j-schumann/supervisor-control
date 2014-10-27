@@ -8,11 +8,11 @@
     Supervisor (Version: <?php echo $this->version; ?>)
     reports state <b><?php echo $this->state['statename']; ?></b><br />
     <br />
-    <a class="button" href="<?php echo $this->url('supervisor/restart'); ?>" title="Restart"
+    <a class="button btn btn-primary" href="<?php echo $this->url('supervisor/restart'); ?>" title="Restart"
         >Restart Daemon</a>
-    <a class="button" href="<?php echo $this->url('supervisor/startall'); ?>" title="Start all processes"
+    <a class="button btn btn-primary" href="<?php echo $this->url('supervisor/startall'); ?>" title="Start all processes"
         >Start all processes</a>
-    <a class="button" href="<?php echo $this->url('supervisor/stopall'); ?>" title="Stop all processes"
+    <a class="button btn btn-primary" href="<?php echo $this->url('supervisor/stopall'); ?>" title="Stop all processes"
         >Stop all processes</a>
 </p>
 

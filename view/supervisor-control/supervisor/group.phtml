@@ -8,12 +8,12 @@
     Used: <?php echo $this->group['inuse'] ? 'yes' : 'no'; ?><br />
     Priority: <?php echo $this->group['priority']; ?><br />
     <br />
-    <a class="button" href="<?php echo $this->url('supervisor/startgroup', array('name' => $this->group['name'])); ?>" title="Start all processes"
+    <a class="button btn btn-primary" href="<?php echo $this->url('supervisor/startgroup', array('name' => $this->group['name'])); ?>" title="Start all processes"
         >Start all group processes</a>
-    <a class="button" href="<?php echo $this->url('supervisor/stopgroup', array('name' => $this->group['name'])); ?>" title="Stop all processes"
+    <a class="button btn btn-primary" href="<?php echo $this->url('supervisor/stopgroup', array('name' => $this->group['name'])); ?>" title="Stop all processes"
         >Stop all group processes</a>
 </p>
-
+<hr />
 <?php foreach($this->group['processes'] as $key => $process) : ?>
     <h4>Process <?php echo $process['name']; ?></h4>
     <p>
@@ -29,12 +29,12 @@
         Exit status: <?php echo $this->group['infos'][$process['name']]['exitstatus']; ?><br />
         Spawn error: <?php echo $this->group['infos'][$process['name']]['spawnerr'] ?: 'n/a'; ?><br />
         <br />
-        <a class="button" href="<?php echo $this->url('supervisor/startprocess', array('name' => $process['name'])); ?>" title="Start process"
+        <a class="button btn btn-primary" href="<?php echo $this->url('supervisor/startprocess', array('name' => $process['name'])); ?>" title="Start process"
             >Start processes</a>
-        <a class="button" href="<?php echo $this->url('supervisor/stopprocess', array('name' => $process['name'])); ?>" title="Stop process"
+        <a class="button btn btn-primary" href="<?php echo $this->url('supervisor/stopprocess', array('name' => $process['name'])); ?>" title="Stop process"
             >Stop processes</a>
     </p>
 <?php endforeach; ?>
-
-<a class="button" href="<?php echo $this->url('supervisor'); ?>" title="Overview"
+<hr />
+<a class="button btn btn-primary" href="<?php echo $this->url('supervisor'); ?>" title="Overview"
     >Goto overview</a>
