@@ -208,7 +208,7 @@ class SupervisorClient extends BaseClient
 
         return $infos;
     }
-    
+
     /**
      * Do a request to the supervisor XML-RPC API
      *
