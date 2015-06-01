@@ -42,8 +42,7 @@ class ConsoleController extends AbstractActionController
                 )
             );
 
-            // no output if everything is OK
-            //echo "process '$name' is running!\n";
+            echo date('Y-m-d H:i:s').": process '$name' is running!\n";
         }
         else {
             $this->getEventManager()->trigger(
@@ -55,7 +54,7 @@ class ConsoleController extends AbstractActionController
                 )
             );
 
-            echo "process '$name' is NOT running!\n";
+            echo date('Y-m-d H:i:s').": process '$name' is NOT running!\n";
         }
     }
 }
