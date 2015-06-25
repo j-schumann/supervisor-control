@@ -12,8 +12,8 @@
         "zendframework/zendframework": "~2.5.1"
     },
     "autoload": {
-        "psr-0": {
-            "SupervisorControl": "src/"
+        "psr-4": {
+            "SupervisorControl\\": "src/"
         }
     }
 }
