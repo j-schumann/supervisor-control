@@ -14,7 +14,7 @@
     $this->form->prepare();
 
     echo $this->form()->openTag($this->form);
-    echo $this->formElementErrors($this->form->get('csrfConfirm'), array('class' => 'errors'));
+    echo $this->formElementErrors($this->form->get('csrfConfirm'), ['class' => 'errors']);
     echo $this->formElement($this->form->get('csrfConfirm'));
     echo $this->formElement($this->form->get('confirm'));
     echo $this->form()->closeTag();

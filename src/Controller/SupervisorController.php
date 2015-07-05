@@ -26,12 +26,12 @@ class SupervisorController extends AbstractActionController
         $client = $this->getServiceLocator()->get('SupervisorClient');
         /* @var $client \SupervisorControl\Client\SupervisorClient */
 
-        return array(
+        return [
             'state'            => $client->getState(),
             'version'          => $client->getSupervisorVersion(),
             'twiddlerSupport'  => $client->isTwiddlerAvailable(),
             'groups'           => $client->getGroupConfig($client),
-        );
+        ];
     }
 
     /**
@@ -45,9 +45,9 @@ class SupervisorController extends AbstractActionController
         $form->setData($this->request->getPost());
 
         if (!$this->request->isPost() || !$form->isValid()) {
-            return array(
+            return [
                 'form' => $form,
-            );
+            ];
         }
 
         $client = $this->getServiceLocator()->get('SupervisorClient');
@@ -84,9 +84,9 @@ class SupervisorController extends AbstractActionController
         $form->setData($this->request->getPost());
 
         if (!$this->request->isPost() || !$form->isValid()) {
-            return array(
+            return [
                 'form' => $form,
-            );
+            ];
         }
 
         $client = $this->getServiceLocator()->get('SupervisorClient');
@@ -117,10 +117,10 @@ class SupervisorController extends AbstractActionController
         $group = $groups[$name];
         $group['infos'] = $client->getProcessInfos(array_keys($group['processes']));
 
-        return array(
+        return [
             'name'  => $name,
             'group' => $group,
-        );
+        ];
     }
 
     /**
@@ -145,7 +145,7 @@ class SupervisorController extends AbstractActionController
         }
 
         $this->flashMessenger()->addSuccessMessage('All processes of group "'.$name.'" started!');
-        return $this->redirect()->toRoute('supervisor/group', array('name' => $name));
+        return $this->redirect()->toRoute('supervisor/group', ['name' => $name]);
     }
 
     /**
@@ -160,10 +160,10 @@ class SupervisorController extends AbstractActionController
         $form->setData($this->request->getPost());
 
         if (!$this->request->isPost() || !$form->isValid()) {
-            return array(
+            return [
                 'name' => $name,
                 'form' => $form,
-            );
+            ];
         }
 
         $client = $this->getServiceLocator()->get('SupervisorClient');
@@ -179,7 +179,7 @@ class SupervisorController extends AbstractActionController
         }
 
         $this->flashMessenger()->addSuccessMessage('All processes of group "'.$name.'" stopped!');
-        return $this->redirect()->toRoute('supervisor/group', array('name' => $name));
+        return $this->redirect()->toRoute('supervisor/group', ['name' => $name]);
     }
 
     /**
@@ -219,10 +219,10 @@ class SupervisorController extends AbstractActionController
         $form->setData($this->request->getPost());
 
         if (!$this->request->isPost() || !$form->isValid()) {
-            return array(
+            return [
                 'name' => $name,
                 'form' => $form,
-            );
+            ];
         }
 
         $client = $this->getServiceLocator()->get('SupervisorClient');

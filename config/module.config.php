@@ -2,211 +2,210 @@
 /**
  * Supervisor-Control config
  */
-return array(
+return [
 // <editor-fold defaultstate="collapsed" desc="console">
-    'console' => array(
-        'router' => array(
-            'routes' => array(
-                'check-process' => array(
-                    'options' => array(
+    'console' => [
+        'router' => [
+            'routes' => [
+                'check-process' => [
+                    'options' => [
                         'route' => 'check-process <name>',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'SupervisorControl\Controller\Console',
-                            'action' => 'check-process',
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                            'action'     => 'check-process',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="controllers">
-    'controllers' => array(
-        'invokables' => array(
+    'controllers' => [
+        'invokables' => [
             'SupervisorControl\Controller\Supervisor' => 'SupervisorControl\Controller\SupervisorController',
             'SupervisorControl\Controller\Console' => 'SupervisorControl\Controller\ConsoleController',
-        ),
-    ),
+        ],
+    ],
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="navigation">
-    'navigation' => array(
-        'default' => array(
-            'administration' => array(
+    'navigation' => [
+        'default' => [
+            'administration' => [
                 'label' => 'navigation.administration', // default label or none is rendered
                 'uri' => '#', // we need either a route or an URI to avoid fatal error
                 'order' => 1000,
-                'pages' => array(
-                    'server' => array(
+                'pages' => [
+                    'server' => [
                         'label' => 'navigation.administration.server', // default label or none is rendered
                         'uri' => '#', // we need a either a route or an URI to avoid fatal error
                         'order' => 1000,
-                        'pages' => array(
-                            array(
+                        'pages' => [
+                            [
                                 'label'     => 'navigation.supervisor',
                                 'route'     => 'supervisor',
                                 'resource'  => 'controller/SupervisorControl\Controller\Supervisor',
                                 'privilege' => 'index',
                                 'order'     => 1000,
-                                'pages'     => array(
-                                    array(
+                                'pages'     => [
+                                    [
                                         'label'   => 'navigation.supervisor.restart',
                                         'route'   => 'supervisor/restart',
                                         'visible' => false,
-                                    ),
-                                    array(
+                                    ],
+                                    [
                                         'label'   => 'navigation.supervisor.stopAll',
                                         'route'   => 'supervisor/stopall',
                                         'visible' => false,
-                                    ),
-                                    array(
+                                    ],
+                                    [
                                         'label'   => 'navigation.supervisor.group',
                                         'route'   => 'supervisor/group',
                                         'visible' => false,
-                                    ),
-                                    array(
+                                    ],
+                                    [
                                         'label'   => 'navigation.supervisor.stopGroup',
                                         'route'   => 'supervisor/stopgroup',
                                         'visible' => false,
-                                    ),
-                                    array(
+                                    ],
+                                    [
                                         'label'   => 'navigation.supervisor.stopProcess',
                                         'route'   => 'supervisor/stopprocess',
                                         'visible' => false,
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="router">
-    'router' => array(
-        'routes' => array(
-            'supervisor' => array(
-                'type' => 'Literal',
-                'options' => array(
-                    'route' => '/supervisor-control/',
-                    'defaults' => array(
+    'router' => [
+        'routes' => [
+            'supervisor' => [
+                'type'    => 'Literal',
+                'options' => [
+                    'route'    => '/supervisor-control/',
+                    'defaults' => [
                         'controller' => 'SupervisorControl\Controller\Supervisor',
-                        'action' => 'index',
-                    ),
-                ),
+                        'action'    => 'index',
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'restart' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => 'restart[/]',
-                            'defaults' => array(
+                'child_routes'  => [
+                    'restart' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => 'restart[/]',
+                            'defaults' => [
                                 'action' => 'restart',
-                            ),
-                        ),
-                    ),
-                    'startall' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => 'start-all[/]',
-                            'defaults' => array(
+                            ],
+                        ],
+                    ],
+                    'startall' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => 'start-all[/]',
+                            'defaults' => [
                                 'action' => 'start-all',
-                            ),
-                        ),
-                    ),
-                    'stopall' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => 'stop-all[/]',
-                            'defaults' => array(
+                            ],
+                        ],
+                    ],
+                    'stopall' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => 'stop-all[/]',
+                            'defaults' => [
                                 'action' => 'stop-all',
-                            ),
-                        ),
-                    ),
-                    'group' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => 'group/[:name][/]',
-                            'constraints' => array(
+                            ],
+                        ],
+                    ],
+                    'group' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => 'group/[:name][/]',
+                            'constraints' => [
                                 'name' => '[a-zA-Z0-9_-]+'
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'group',
-                            ),
-                        ),
-                    ),
-                    'startgroup' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => 'start-group/[:name][/]',
-                            'constraints' => array(
+                            ],
+                        ],
+                    ],
+                    'startgroup' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => 'start-group/[:name][/]',
+                            'constraints' => [
                                 'name' => '[a-zA-Z0-9_-]+'
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'start-group',
-                            ),
-                        ),
-                    ),
-                    'stopgroup' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => 'stop-group/[:name][/]',
-                            'constraints' => array(
+                            ],
+                        ],
+                    ],
+                    'stopgroup' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => 'stop-group/[:name][/]',
+                            'constraints' => [
                                 'name' => '[a-zA-Z0-9_-]+'
-                            ),
-                            'defaults' => array(
+                                ],
+                            'defaults' => [
                                 'action' => 'stop-group',
-                            ),
-                        ),
-                    ),
-                    'startprocess' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => 'start-process/[:name][/]',
-                            'constraints' => array(
+                            ],
+                        ],
+                    ],
+                    'startprocess' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => 'start-process/[:name][/]',
+                            'constraints' => [
                                 'name' => '[a-zA-Z0-9_-]+'
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'start-process',
-                            ),
-                        ),
-                    ),
-                    'stopprocess' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => 'stop-process/[:name][/]',
-                            'constraints' => array(
+                            ],
+                        ],
+                    ],
+                    'stopprocess' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => 'stop-process/[:name][/]',
+                            'constraints' => [
                                 'name' => '[a-zA-Z0-9_-]+'
-                            ),
-                            'defaults' => array(
+                                ],
+                            'defaults' => [
                                 'action' => 'stop-process',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="service_manager">
-    'service_manager' => array(
-        'factories' => array(
+    'service_manager' => [
+        'factories' => [
             'SupervisorClient' => 'SupervisorControl\Client\ClientServiceFactory',
-        ),
-    ),
+        ],
+    ],
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="supervisor_client">
-    'supervisor_client' => array(
-        // configured in supervisord.conf [inet_http_server] or [unix_http_server]
+    'supervisor_client' => [
         'hostname' => '127.0.0.1',
         'port' => 9001,
-    ),
+    ],
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="view_manager">
-    'view_manager' => array(
-        'template_path_stack' => array(
+    'view_manager' => [
+        'template_path_stack' => [
             __DIR__ . '/../view',
-        ),
-    ),
+        ],
+    ],
 // </editor-fold>
-);
+];

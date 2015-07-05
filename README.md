@@ -11,18 +11,18 @@ Configuration
 
 Add to config/autoload/supervisorcontrol.local.php:
 ```php
-    'supervisor_client' => array(
+    'supervisor_client' => [
         'hostname' => 'unix:///var/lib/supervisord/supervisor.sock',
         'port'     => -1,
-    ),
+    ],
 ```
 
 or:
 ```php
-    'supervisor_client' => array(
+    'supervisor_client' => [
         'hostname' => '127.0.0.1',
         'port'     => 9001,
-    ),
+    ],
 ```
 
 Usage

@@ -37,26 +37,26 @@ class SupervisorClient extends BaseClient
      */
     public function getGroupConfig()
     {
-        $groups = array();
+        $groups = [];
         $config = $this->getAllConfigInfo();
 
         foreach($config as $process) {
             $groupName = $process['group'];
 
             if (!isset($groups[$groupName])) {
-                $groups[$groupName] = array(
+                $groups[$groupName] = [
                     'name'      => $groupName,
                     'priority'  => $process['group_prio'],
                     'inuse'     => $process['inuse'],
-                    'processes' => array(),
-                );
+                    'processes' => [],
+                ];
             }
 
-            $groups[$groupName]['processes'][$process['name']] = array(
+            $groups[$groupName]['processes'][$process['name']] = [
                 'name'      => $process['name'],
                 'priority'  => $process['process_prio'],
                 'autostart' => $process['autostart'],
-            );
+            ];
         }
 
         return $groups;
@@ -190,7 +190,7 @@ class SupervisorClient extends BaseClient
         if ($reload || !$this->processInfo) {
             $this->processInfo = $this->getAllProcessInfo();
         }
-        $infos = array();
+        $infos = [];
         foreach ($names as $name) {
             // the result only contains the name without the group prefix
             $parts = explode(':', $name);
@@ -235,7 +235,7 @@ class SupervisorClient extends BaseClient
         }
 
         // Create the HTTP request.
-        $xml_rpc = \xmlrpc_encode_request("$namespace.$method", $args, array('encoding' => 'utf-8'));
+        $xml_rpc = \xmlrpc_encode_request("$namespace.$method", $args, ['encoding' => 'utf-8']);
         $httpRequest = "POST /RPC2 HTTP/1.1\r\n" .
             "Host: $host\r\n" .
             "Content-Length: " . strlen($xml_rpc) .

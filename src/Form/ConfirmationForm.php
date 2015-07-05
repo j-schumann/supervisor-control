@@ -19,26 +19,26 @@ class ConfirmationForm extends Form
      *
      * @param array $options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         parent::__construct('supervisor-confirm', $options);
 
-        $this->add(array(
+        $this->add([
             'type'    => 'Zend\Form\Element\Csrf',
             'name'    => 'csrfConfirm',
-            'options' => array(
-                'csrf_options' => array(
+            'options' => [
+                'csrf_options' => [
                     'timeout' => 600,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'confirm',
-            'attributes' => array(
+            'attributes' => [
                 'type'  => 'submit',
                 'value' => 'Confirm',
-            )
-        ));
+            ],
+        ]);
     }
 }

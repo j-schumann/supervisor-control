@@ -36,10 +36,10 @@ class ConsoleController extends AbstractActionController
             $this->getEventManager()->trigger(
                 self::EVENT_PROCESSRUNNING,
                 $client,
-                array(
+                [
                     'processName' => $name,
                     'info'        => $info,
-                )
+                ]
             );
 
             echo date('Y-m-d H:i:s').": process '$name' is running!\n";
@@ -48,10 +48,10 @@ class ConsoleController extends AbstractActionController
             $this->getEventManager()->trigger(
                 self::EVENT_PROCESSNOTRUNNING,
                 $client,
-                array(
+                [
                     'processName' => $name,
                     'info'        => $info,
-                )
+                ]
             );
 
             echo date('Y-m-d H:i:s').": process '$name' is NOT running!\n";

@@ -27,7 +27,7 @@
 <h3>Program Groups</h3>
 <?php foreach($this->groups as $group) : ?>
     <p>
-        Name: <a href="<?php echo $this->url('supervisor/group', array('name' => $group['name'])); ?>" title="Group details">
+        Name: <a href="<?php echo $this->url('supervisor/group', ['name' => $group['name']]); ?>" title="Group details">
             <?php echo $group['name']; ?>
         </a><br />
         Used: <?php echo $group['inuse'] ? 'yes' : 'no'; ?><br />
