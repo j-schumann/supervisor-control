@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright   (c) 2014, Vrok
  * @license     http://customlicense CustomLicense
@@ -28,9 +29,9 @@ class ConsoleController extends AbstractActionController
         $client = $this->getServiceLocator()->get('SupervisorClient');
         /* @var $client \SupervisorControl\Client\SupervisorClient */
 
-        $name = $this->params('name');
+        $name      = $this->params('name');
         $isRunning = $client->isProcessRunning($name);
-        $info = $client->getProcessInfo($name);
+        $info      = $client->getProcessInfo($name);
 
         if ($isRunning) {
             $this->getEventManager()->trigger(
@@ -43,8 +44,7 @@ class ConsoleController extends AbstractActionController
             );
 
             echo date('Y-m-d H:i:s').": process '$name' is running!\n";
-        }
-        else {
+        } else {
             $this->getEventManager()->trigger(
                 self::EVENT_PROCESSNOTRUNNING,
                 $client,

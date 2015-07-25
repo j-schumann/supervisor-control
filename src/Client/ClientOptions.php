@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright   (c) 2014, Vrok
  * @license     http://customlicense CustomLicense
@@ -42,12 +43,14 @@ class ClientOptions extends AbstractOptions
     /**
      * Set the hostname to connect to.
      *
-     * @param  string $hostname
+     * @param string $hostname
+     *
      * @return self
      */
     public function setHostname($hostname)
     {
         $this->hostname = (string) $hostname;
+
         return $this;
     }
 
@@ -64,12 +67,14 @@ class ClientOptions extends AbstractOptions
     /**
      * Set the port to connect to.
      *
-     * @param  int $port
+     * @param int $port
+     *
      * @return self
      */
     public function setPort($port)
     {
         $this->port = (int) $port;
+
         return $this;
     }
 
@@ -86,12 +91,14 @@ class ClientOptions extends AbstractOptions
     /**
      * Set the connection timeout.
      *
-     * @param  int $timeout
+     * @param int $timeout
+     *
      * @return self
      */
     public function setTimeout($timeout)
     {
         $this->timeout = (int) $timeout;
+
         return $this;
     }
 
@@ -108,12 +115,14 @@ class ClientOptions extends AbstractOptions
     /**
      * Set the username to use.
      *
-     * @param  string $username
+     * @param string $username
+     *
      * @return self
      */
     public function setUsername($username)
     {
         $this->username = (string) $username;
+
         return $this;
     }
 
@@ -130,12 +139,14 @@ class ClientOptions extends AbstractOptions
     /**
      * Set the password to use.
      *
-     * @param  string $password
+     * @param string $password
+     *
      * @return self
      */
     public function setPassword($password)
     {
         $this->password = (string) $password;
+
         return $this;
     }
 

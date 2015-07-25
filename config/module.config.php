@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Supervisor-Control config
+ * Supervisor-Control config.
  */
 return [
 // <editor-fold defaultstate="collapsed" desc="console">
@@ -9,7 +10,7 @@ return [
             'routes' => [
                 'check-process' => [
                     'options' => [
-                        'route' => 'check-process <name>',
+                        'route'    => 'check-process <name>',
                         'defaults' => [
                             'controller' => 'SupervisorControl\Controller\Console',
                             'action'     => 'check-process',
@@ -24,7 +25,7 @@ return [
     'controllers' => [
         'invokables' => [
             'SupervisorControl\Controller\Supervisor' => 'SupervisorControl\Controller\SupervisorController',
-            'SupervisorControl\Controller\Console' => 'SupervisorControl\Controller\ConsoleController',
+            'SupervisorControl\Controller\Console'    => 'SupervisorControl\Controller\ConsoleController',
         ],
     ],
 // </editor-fold>
@@ -33,12 +34,12 @@ return [
         'default' => [
             'administration' => [
                 'label' => 'navigation.administration', // default label or none is rendered
-                'uri' => '#', // we need either a route or an URI to avoid fatal error
+                'uri'   => '#', // we need either a route or an URI to avoid fatal error
                 'order' => 1000,
                 'pages' => [
                     'server' => [
                         'label' => 'navigation.administration.server', // default label or none is rendered
-                        'uri' => '#', // we need a either a route or an URI to avoid fatal error
+                        'uri'   => '#', // we need a either a route or an URI to avoid fatal error
                         'order' => 1000,
                         'pages' => [
                             [
@@ -91,7 +92,7 @@ return [
                     'route'    => '/supervisor-control/',
                     'defaults' => [
                         'controller' => 'SupervisorControl\Controller\Supervisor',
-                        'action'    => 'index',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -128,7 +129,7 @@ return [
                         'options' => [
                             'route'       => 'group/[:name][/]',
                             'constraints' => [
-                                'name' => '[a-zA-Z0-9_-]+'
+                                'name' => '[a-zA-Z0-9_-]+',
                             ],
                             'defaults' => [
                                 'action' => 'group',
@@ -140,7 +141,7 @@ return [
                         'options' => [
                             'route'       => 'start-group/[:name][/]',
                             'constraints' => [
-                                'name' => '[a-zA-Z0-9_-]+'
+                                'name' => '[a-zA-Z0-9_-]+',
                             ],
                             'defaults' => [
                                 'action' => 'start-group',
@@ -152,7 +153,7 @@ return [
                         'options' => [
                             'route'       => 'stop-group/[:name][/]',
                             'constraints' => [
-                                'name' => '[a-zA-Z0-9_-]+'
+                                'name' => '[a-zA-Z0-9_-]+',
                                 ],
                             'defaults' => [
                                 'action' => 'stop-group',
@@ -164,7 +165,7 @@ return [
                         'options' => [
                             'route'       => 'start-process/[:name][/]',
                             'constraints' => [
-                                'name' => '[a-zA-Z0-9_-]+'
+                                'name' => '[a-zA-Z0-9_-]+',
                             ],
                             'defaults' => [
                                 'action' => 'start-process',
@@ -176,7 +177,7 @@ return [
                         'options' => [
                             'route'       => 'stop-process/[:name][/]',
                             'constraints' => [
-                                'name' => '[a-zA-Z0-9_-]+'
+                                'name' => '[a-zA-Z0-9_-]+',
                                 ],
                             'defaults' => [
                                 'action' => 'stop-process',
@@ -198,13 +199,13 @@ return [
 // <editor-fold defaultstate="collapsed" desc="supervisor_client">
     'supervisor_client' => [
         'hostname' => '127.0.0.1',
-        'port' => 9001,
+        'port'     => 9001,
     ],
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="view_manager">
     'view_manager' => [
         'template_path_stack' => [
-            __DIR__ . '/../view',
+            __DIR__.'/../view',
         ],
     ],
 // </editor-fold>

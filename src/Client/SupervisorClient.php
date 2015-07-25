@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright   (c) 2014, Vrok
  * @license     http://customlicense CustomLicense
@@ -15,16 +16,16 @@ use SupervisorClient\SupervisorClient as BaseClient;
 class SupervisorClient extends BaseClient
 {
     // @link http://supervisord.org/subprocess.html#process-states
-    const PROCESS_STATE_STARTING  = 10;
-    const PROCESS_STATE_RUNNING   = 20;
-    const PROCESS_STATE_BACKOFF   = 30;
-    const PROCESS_STATE_STOPPING  = 40;
-    const PROCESS_STATE_EXITED    = 100;
-    const PROCESS_STATE_FATAL     = 200;
-    const PROCESS_STATE_UNKNOWN   = 1000;
+    const PROCESS_STATE_STARTING = 10;
+    const PROCESS_STATE_RUNNING  = 20;
+    const PROCESS_STATE_BACKOFF  = 30;
+    const PROCESS_STATE_STOPPING = 40;
+    const PROCESS_STATE_EXITED   = 100;
+    const PROCESS_STATE_FATAL    = 200;
+    const PROCESS_STATE_UNKNOWN  = 1000;
 
     /**
-     * Caches the result of getAllProcessInfo fetched by {@link getProcessInfos}
+     * Caches the result of getAllProcessInfo fetched by {@link getProcessInfos}.
      *
      * @var array
      */
@@ -40,7 +41,7 @@ class SupervisorClient extends BaseClient
         $groups = [];
         $config = $this->getAllConfigInfo();
 
-        foreach($config as $process) {
+        foreach ($config as $process) {
             $groupName = $process['group'];
 
             if (!isset($groups[$groupName])) {
@@ -64,9 +65,10 @@ class SupervisorClient extends BaseClient
 
     /**
      * Retrieves the config information for the given process (may be the short name
-     * or the FQN with the group name prefixed: "group:process")
+     * or the FQN with the group name prefixed: "group:process").
      *
      * @param string $name
+     *
      * @return array
      */
     public function getProcessConfig($name)
@@ -78,24 +80,25 @@ class SupervisorClient extends BaseClient
         }
 
         $config = $this->getAllConfigInfo();
-        foreach($config as $process) {
+        foreach ($config as $process) {
             if ($process['name'] === $name) {
                 return $process;
             }
         }
 
-        return null;
+        return;
     }
 
     /**
      * Checks if the given process exists in the configuration.
      *
      * @param string $name
+     *
      * @return bool
      */
     public function processExists($name)
     {
-        return (bool)$this->getProcessConfig($name);
+        return (bool) $this->getProcessConfig($name);
     }
 
     /**
@@ -104,7 +107,8 @@ class SupervisorClient extends BaseClient
      * numprocs > 0 or getProcessInfo() will fail.
      *
      * @param string $name
-     * @return string   the FQN or null if the process wasn't found in the config
+     *
+     * @return string the FQN or null if the process wasn't found in the config
      */
     public function getProcessFQN($name)
     {
@@ -115,7 +119,7 @@ class SupervisorClient extends BaseClient
 
         $config = $this->getProcessConfig($name);
         if (!$config) {
-            return null;
+            return;
         }
 
         return $config['group'].':'.$config['name'];
@@ -126,13 +130,14 @@ class SupervisorClient extends BaseClient
      * Replaces a short name with the FQN ("group:process") before querying the API.
      *
      * @param string $processName
+     *
      * @return array or null if the process was not found
      */
     public function getProcessInfo($processName)
     {
         $fqn = $this->getProcessFQN($processName);
         if (!$fqn) {
-            return null;
+            return;
         }
 
         return parent::getProcessInfo($fqn);
@@ -142,7 +147,8 @@ class SupervisorClient extends BaseClient
      * Retrieves the state of the process given by its name.
      *
      * @param string $name
-     * @return int  the process state or PROCESS_STATE_UNKNOWN if process not found
+     *
+     * @return int the process state or PROCESS_STATE_UNKNOWN if process not found
      */
     public function getProcessState($name)
     {
@@ -153,20 +159,20 @@ class SupervisorClient extends BaseClient
 
         try {
             $infos = $this->getProcessInfo($fqn);
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             // most probable reason is "BAD NAME"
             return self::PROCESS_STATE_UNKNOWN;
         }
 
-        return (int)$infos['state'];
+        return (int) $infos['state'];
     }
 
     /**
      * Checks if the process given by name is running (or starting).
      *
-     * @param string $name  process name to check
-     * @return boolean
+     * @param string $name process name to check
+     *
+     * @return bool
      */
     public function isProcessRunning($name)
     {
@@ -182,7 +188,8 @@ class SupervisorClient extends BaseClient
      * Retrieves the process information for multiple processes at once.
      *
      * @param array $names  list of process names to fetch information for
-     * @param bool $reload  set to true to force a reload of the information via RPC
+     * @param bool  $reload set to true to force a reload of the information via RPC
+     *
      * @return array
      */
     public function getProcessInfos(array $names, $reload = false)
@@ -198,7 +205,7 @@ class SupervisorClient extends BaseClient
                 $name = $parts[1];
             }
 
-            foreach($this->processInfo as $info) {
+            foreach ($this->processInfo as $info) {
                 if ($info['name'] === $name) {
                     $infos[$name] = $info;
                     break;
@@ -210,18 +217,18 @@ class SupervisorClient extends BaseClient
     }
 
     /**
-     * Do a request to the supervisor XML-RPC API
+     * Do a request to the supervisor XML-RPC API.
      *
      * @param string $namespace The namespace of the request
-     * @param string $method The method in the namespace
-     * @param mixed $args Optional arguments
+     * @param string $method    The method in the namespace
+     * @param mixed  $args      Optional arguments
      */
     protected function _doRequest($namespace, $method, $args)
     {
         // Create the authorization header.
         $authorization = '';
         if (!is_null($this->_username) && !is_null($this->_password)) {
-            $authorization = "\r\nAuthorization: Basic " . base64_encode($this->_username . ':' . $this->_password);
+            $authorization = "\r\nAuthorization: Basic ".base64_encode($this->_username.':'.$this->_password);
         }
 
         $host = '';
@@ -230,17 +237,17 @@ class SupervisorClient extends BaseClient
             $host = $this->_hostname;
 
             if ($this->_port != -1) {
-                $host .= ':' . $this->_port;
+                $host .= ':'.$this->_port;
             }
         }
 
         // Create the HTTP request.
-        $xml_rpc = \xmlrpc_encode_request("$namespace.$method", $args, ['encoding' => 'utf-8']);
-        $httpRequest = "POST /RPC2 HTTP/1.1\r\n" .
-            "Host: $host\r\n" .
-            "Content-Length: " . strlen($xml_rpc) .
-            $authorization .
-            "\r\n\r\n" .
+        $xml_rpc     = \xmlrpc_encode_request("$namespace.$method", $args, ['encoding' => 'utf-8']);
+        $httpRequest = "POST /RPC2 HTTP/1.1\r\n".
+            "Host: $host\r\n".
+            'Content-Length: '.strlen($xml_rpc).
+            $authorization.
+            "\r\n\r\n".
             $xml_rpc;
 
         // Write the request to the socket.

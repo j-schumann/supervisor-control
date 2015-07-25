@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright   (c) 2014, Vrok
  * @license     http://customlicense CustomLicense
@@ -27,10 +28,10 @@ class SupervisorController extends AbstractActionController
         /* @var $client \SupervisorControl\Client\SupervisorClient */
 
         return [
-            'state'            => $client->getState(),
-            'version'          => $client->getSupervisorVersion(),
-            'twiddlerSupport'  => $client->isTwiddlerAvailable(),
-            'groups'           => $client->getGroupConfig($client),
+            'state'           => $client->getState(),
+            'version'         => $client->getSupervisorVersion(),
+            'twiddlerSupport' => $client->isTwiddlerAvailable(),
+            'groups'          => $client->getGroupConfig($client),
         ];
     }
 
@@ -55,6 +56,7 @@ class SupervisorController extends AbstractActionController
         $client->restart();
 
         $this->flashMessenger()->addSuccessMessage('Restart command sent!');
+
         return $this->redirect()->toRoute('supervisor');
     }
 
@@ -70,6 +72,7 @@ class SupervisorController extends AbstractActionController
         $client->startAllProcesses();
 
         $this->flashMessenger()->addSuccessMessage('All processes started!');
+
         return $this->redirect()->toRoute('supervisor');
     }
 
@@ -94,6 +97,7 @@ class SupervisorController extends AbstractActionController
 
         $client->stopAllProcesses();
         $this->flashMessenger()->addSuccessMessage('All processes stopped!');
+
         return $this->redirect()->toRoute('supervisor');
     }
 
@@ -104,17 +108,18 @@ class SupervisorController extends AbstractActionController
      */
     public function groupAction()
     {
-        $name = $this->params('name');
+        $name   = $this->params('name');
         $client = $this->getServiceLocator()->get('SupervisorClient');
         /* @var $client \SupervisorControl\Client\SupervisorClient */
 
         $groups = $client->getGroupConfig($client);
         if (!isset($groups[$name])) {
             $this->flashMessenger()->addErrorMessage('Group "'.$name.'" not found!');
+
             return $this->redirect()->toRoute('supervisor');
         }
 
-        $group = $groups[$name];
+        $group          = $groups[$name];
         $group['infos'] = $client->getProcessInfos(array_keys($group['processes']));
 
         return [
@@ -137,14 +142,15 @@ class SupervisorController extends AbstractActionController
 
         try {
             $client->startProcessGroup($name);
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage('Command failed with message: "'
                     .$e->getMessage().'"');
+
             return $this->redirect()->toRoute('supervisor');
         }
 
         $this->flashMessenger()->addSuccessMessage('All processes of group "'.$name.'" started!');
+
         return $this->redirect()->toRoute('supervisor/group', ['name' => $name]);
     }
 
@@ -171,14 +177,15 @@ class SupervisorController extends AbstractActionController
 
         try {
             $client->stopProcessGroup($name);
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage('Command failed with message: "'
                     .$e->getMessage().'"');
+
             return $this->redirect()->toRoute('supervisor');
         }
 
         $this->flashMessenger()->addSuccessMessage('All processes of group "'.$name.'" stopped!');
+
         return $this->redirect()->toRoute('supervisor/group', ['name' => $name]);
     }
 
@@ -196,14 +203,15 @@ class SupervisorController extends AbstractActionController
 
         try {
             $client->startProcess($name);
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage('Command failed with message: "'
                     .$e->getMessage().'"');
+
             return $this->redirect()->toRoute('supervisor');
         }
 
         $this->flashMessenger()->addSuccessMessage('Process "'.$name.'" started!');
+
         return $this->redirect()->toRoute('supervisor');
     }
 
@@ -230,14 +238,15 @@ class SupervisorController extends AbstractActionController
 
         try {
             $client->stopProcess($name);
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage('Command failed with message: "'
                     .$e->getMessage().'"');
+
             return $this->redirect()->toRoute('supervisor');
         }
 
         $this->flashMessenger()->addSuccessMessage('Processes "'.$name.'" stopped!');
+
         return $this->redirect()->toRoute('supervisor');
     }
 }
