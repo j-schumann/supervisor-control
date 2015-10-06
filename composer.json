@@ -9,6 +9,7 @@
     "require": {
         "php": ">=5.5",
         "mondalaci/supervisor-client": "dev-master",
+        "supervisorphp/supervisor": "3.0.0",
         "zendframework/zendframework": "~2.5.1"
     },
     "autoload": {
