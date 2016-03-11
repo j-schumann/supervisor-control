@@ -8,6 +8,7 @@
 
 namespace SupervisorControl\Controller;
 
+use SupervisorControl\Client\SupervisorClient;
 use SupervisorControl\Form\ConfirmationForm;
 use Zend\Mvc\Controller\AbstractActionController;
 
@@ -18,20 +19,32 @@ use Zend\Mvc\Controller\AbstractActionController;
 class SupervisorController extends AbstractActionController
 {
     /**
+     * @var SupervisorClient
+     */
+    protected $supervisorClient = null;
+
+    /**
+     * Class constructor - stores the given dependency
+     *
+     * @param SupervisorClient $sc
+     */
+    public function __construct(SupervisorClient $sc)
+    {
+        $this->supervisorClient = $sc;
+    }
+
+    /**
      * Shows the overall supervisord status and the configured program groups.
      *
      * @return array
      */
     public function indexAction()
     {
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
-
         return [
-            'state'           => $client->getState(),
-            'version'         => $client->getSupervisorVersion(),
-            'twiddlerSupport' => $client->isTwiddlerAvailable(),
-            'groups'          => $client->getGroupConfig($client),
+            'state'           => $this->supervisorClient->getState(),
+            'version'         => $this->supervisorClient->getSupervisorVersion(),
+            'twiddlerSupport' => $this->supervisorClient->isTwiddlerAvailable(),
+            'groups'          => $this->supervisorClient->getGroupConfig(),
         ];
     }
 
@@ -51,10 +64,7 @@ class SupervisorController extends AbstractActionController
             ];
         }
 
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
-        $client->restart();
-
+        $this->supervisorClient->restart();
         $this->flashMessenger()->addSuccessMessage('Restart command sent!');
 
         return $this->redirect()->toRoute('supervisor');
@@ -67,10 +77,7 @@ class SupervisorController extends AbstractActionController
      */
     public function startallAction()
     {
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
-        $client->startAllProcesses();
-
+        $this->supervisorClient->startAllProcesses();
         $this->flashMessenger()->addSuccessMessage('All processes started!');
 
         return $this->redirect()->toRoute('supervisor');
@@ -92,10 +99,7 @@ class SupervisorController extends AbstractActionController
             ];
         }
 
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
-
-        $client->stopAllProcesses();
+        $this->supervisorClient->stopAllProcesses();
         $this->flashMessenger()->addSuccessMessage('All processes stopped!');
 
         return $this->redirect()->toRoute('supervisor');
@@ -109,10 +113,8 @@ class SupervisorController extends AbstractActionController
     public function groupAction()
     {
         $name   = $this->params('name');
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
 
-        $groups = $client->getGroupConfig($client);
+        $groups = $this->supervisorClient->getGroupConfig();
         if (!isset($groups[$name])) {
             $this->flashMessenger()->addErrorMessage('Group "'.$name.'" not found!');
 
@@ -120,7 +122,7 @@ class SupervisorController extends AbstractActionController
         }
 
         $group          = $groups[$name];
-        $group['infos'] = $client->getProcessInfos(array_keys($group['processes']));
+        $group['infos'] = $this->supervisorClient->getProcessInfos(array_keys($group['processes']));
 
         return [
             'name'  => $name,
@@ -137,11 +139,8 @@ class SupervisorController extends AbstractActionController
     {
         $name = $this->params('name');
 
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
-
         try {
-            $client->startProcessGroup($name);
+            $this->supervisorClient->startProcessGroup($name);
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage('Command failed with message: "'
                     .$e->getMessage().'"');
@@ -172,11 +171,8 @@ class SupervisorController extends AbstractActionController
             ];
         }
 
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
-
         try {
-            $client->stopProcessGroup($name);
+            $this->supervisorClient->stopProcessGroup($name);
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage('Command failed with message: "'
                     .$e->getMessage().'"');
@@ -198,11 +194,8 @@ class SupervisorController extends AbstractActionController
     {
         $name = $this->params('name');
 
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
-
         try {
-            $client->startProcess($name);
+            $this->supervisorClient->startProcess($name);
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage('Command failed with message: "'
                     .$e->getMessage().'"');
@@ -233,11 +226,8 @@ class SupervisorController extends AbstractActionController
             ];
         }
 
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
-
         try {
-            $client->stopProcess($name);
+            $this->supervisorClient->stopProcess($name);
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage('Command failed with message: "'
                     .$e->getMessage().'"');

@@ -8,6 +8,7 @@
 
 namespace SupervisorControl\Controller;
 
+use SupervisorControl\Client\SupervisorClient;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
@@ -19,6 +20,21 @@ class ConsoleController extends AbstractActionController
     const EVENT_PROCESSNOTRUNNING = 'processNotRunning';
 
     /**
+     * @var SupervisorClient
+     */
+    protected $supervisorClient = null;
+
+    /**
+     * Class constructor - stores the given dependency
+     *
+     * @param SupervisorClient $sc
+     */
+    public function __construct(SupervisorClient $sc)
+    {
+        $this->supervisorClient = $sc;
+    }
+
+    /**
      * Checks if the process specified by name is currently running.
      *
      * @triggers processRunning
@@ -26,17 +42,14 @@ class ConsoleController extends AbstractActionController
      */
     public function checkProcessAction()
     {
-        $client = $this->getServiceLocator()->get('SupervisorClient');
-        /* @var $client \SupervisorControl\Client\SupervisorClient */
-
         $name      = $this->params('name');
-        $isRunning = $client->isProcessRunning($name);
-        $info      = $client->getProcessInfo($name);
+        $isRunning = $this->supervisorClient->isProcessRunning($name);
+        $info      = $this->supervisorClient->getProcessInfo($name);
 
         if ($isRunning) {
             $this->getEventManager()->trigger(
                 self::EVENT_PROCESSRUNNING,
-                $client,
+                $this->supervisorClient,
                 [
                     'processName' => $name,
                     'info'        => $info,
@@ -47,7 +60,7 @@ class ConsoleController extends AbstractActionController
         } else {
             $this->getEventManager()->trigger(
                 self::EVENT_PROCESSNOTRUNNING,
-                $client,
+                $this->supervisorClient,
                 [
                     'processName' => $name,
                     'info'        => $info,

@@ -21,14 +21,6 @@ return [
         ],
     ],
 // </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="controllers">
-    'controllers' => [
-        'invokables' => [
-            'SupervisorControl\Controller\Supervisor' => 'SupervisorControl\Controller\SupervisorController',
-            'SupervisorControl\Controller\Console'    => 'SupervisorControl\Controller\ConsoleController',
-        ],
-    ],
-// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="navigation">
     'navigation' => [
         'default' => [
@@ -192,7 +184,7 @@ return [
 // <editor-fold defaultstate="collapsed" desc="service_manager">
     'service_manager' => [
         'factories' => [
-            'SupervisorClient' => 'SupervisorControl\Client\ClientServiceFactory',
+            'SupervisorControl\Client\SupervisorClient' => 'SupervisorControl\Client\ClientServiceFactory',
         ],
     ],
 // </editor-fold>
