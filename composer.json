@@ -2,7 +2,7 @@
     "name": "vrok/supervisor-control",
     "description": "ZF2 Module for supervisord management",
     "type": "library",
-    "license": "private",
+    "license": "MIT",
     "homepage": "http://www.vrok.de/",
     "keywords": ["supervisor", "supervisord", "zend", "zf2"],
 
