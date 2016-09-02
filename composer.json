@@ -8,9 +8,9 @@
     "minimum-stability": "dev",
 
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.6",
         "mondalaci/supervisor-client": "dev-master",
-        "zendframework/zendframework": "^2.5.1"
+        "zendframework/zendframework": "~2.5.3"
     },
     "autoload": {
         "psr-4": {
