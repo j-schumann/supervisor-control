@@ -16,5 +16,11 @@
         "psr-4": {
             "SupervisorControl\\": "src/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-dev": "0.1.x",
+            "dev-master": "1.0.x"
+        }
     }
 }
