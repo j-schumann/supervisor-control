@@ -9,8 +9,7 @@
 namespace SupervisorControl\Client;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Creates an instance of the supervisor client.
@@ -21,8 +20,8 @@ class ClientServiceFactory implements FactoryInterface
      * Creates a client instance.
      *
      * @param ContainerInterface $container
-     * @todo params doc
-     *
+     * @param string $requestedName
+     * @param array $options
      * @return SupervisorClient
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
@@ -38,11 +37,5 @@ class ClientServiceFactory implements FactoryInterface
         );
 
         return $client;
-    }
-
-    // @todo remove zf3
-    public function createService(ServiceLocatorInterface $services)
-    {
-        return $this($services, SupervisorClient::class);
     }
 }

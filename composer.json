@@ -1,14 +1,14 @@
 {
     "name": "vrok/supervisor-control",
-    "description": "ZF2 Module for supervisord management",
+    "description": "ZF3 Module for supervisord management",
     "type": "library",
     "license": "MIT",
     "homepage": "http://www.vrok.de/",
-    "keywords": ["supervisor", "supervisord", "zend", "zf2"],
+    "keywords": ["supervisor", "supervisord", "zend", "zf3"],
     "minimum-stability": "dev",
 
     "require": {
-        "php": ">=5.6",
+        "php": ">=7.0",
         "mondalaci/supervisor-client": "dev-master",
         "zendframework/zend-component-installer": "^0.3.1",
         "zendframework/zend-mvc": "^3.0.3",

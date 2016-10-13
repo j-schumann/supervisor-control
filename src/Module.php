@@ -33,18 +33,17 @@ class Module implements
      * in the config files to allow caching of the complete configuration.
      *
      * @return array
-     * @todo alle controller auf ihre dependencies prüfen und ggf direct injecten
      */
     public function getControllerConfig()
     {
         return [
             'factories' => [
                 'SupervisorControl\Controller\Supervisor' => function ($sm) {
-                    $client = $sm->getServiceLocator()->get('SupervisorControl\Client\SupervisorClient');
+                    $client = $sm->get('SupervisorControl\Client\SupervisorClient');
                     return new Controller\SupervisorController($client);
                 },
                 'SupervisorControl\Controller\Console' => function ($sm) {
-                    $client = $sm->getServiceLocator()->get('SupervisorControl\Client\SupervisorClient');
+                    $client = $sm->get('SupervisorControl\Client\SupervisorClient');
                     return new Controller\ConsoleController($client);
                 },
             ],
