@@ -1,7 +1,7 @@
 supervisor-control
 ==================
 
-ZF2 Module for supervisord management based on mondalaci/supervisor-client.
+ZF3 Module for supervisord management based on mondalaci/supervisor-client.
 Offers a frontend that allows to restart the supervisord daemon and start/stop
 single processes, all processes of a group or all configured processes. Shows
 information about the configured programm groups and the running processes.
