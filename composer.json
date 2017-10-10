@@ -6,25 +6,41 @@
     "homepage": "http://www.vrok.de/",
     "keywords": ["supervisor", "supervisord", "zend", "zf3"],
     "minimum-stability": "dev",
+    "prefer-stable": true,
 
-    "require": {
-        "php": ">=7.1",
-        "mondalaci/supervisor-client": "dev-master",
-        "zendframework/zend-component-installer": "^0.6.0",
-        "zendframework/zend-mvc": "^3.0.4",
-        "zendframework/zend-mvc-console": "^1.1.11",
-        "zendframework/zend-mvc-form": "^1.0.0",
-        "zendframework/zend-mvc-plugin-flashmessenger": "^1.0.0"
-    },
     "autoload": {
         "psr-4": {
             "SupervisorControl\\": "src/"
         }
     },
+    "require": {
+        "php": ">=7.1",
+        "mondalaci/supervisor-client": "dev-master",
+        "zendframework/zend-component-installer": "^0.6.0",
+        "zendframework/zend-mvc": "^3.1.0",
+        "zendframework/zend-mvc-console": "^1.1.11",
+        "zendframework/zend-mvc-form": "^1.0.0",
+        "zendframework/zend-mvc-plugin-flashmessenger": "^1.0.0"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "^6.4.1",
+        "zendframework/zend-coding-standard": "~1.0.0"
+    },
     "extra": {
         "branch-alias": {
-            "dev-dev": "1.1.x-dev",
-            "dev-master": "1.0.x-dev"
+            "dev-dev": "3.0.x-dev",
+            "dev-master": "2.1.x-dev"
         }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "upload-coverage": "coveralls -v"
     }
 }

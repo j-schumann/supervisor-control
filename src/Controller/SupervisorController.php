@@ -58,7 +58,7 @@ class SupervisorController extends AbstractActionController
         $form = new ConfirmationForm();
         $form->setData($this->request->getPost());
 
-        if (!$this->request->isPost() || !$form->isValid()) {
+        if (! $this->request->isPost() || ! $form->isValid()) {
             return [
                 'form' => $form,
             ];
@@ -93,7 +93,7 @@ class SupervisorController extends AbstractActionController
         $form = new ConfirmationForm();
         $form->setData($this->request->getPost());
 
-        if (!$this->request->isPost() || !$form->isValid()) {
+        if (! $this->request->isPost() || ! $form->isValid()) {
             return [
                 'form' => $form,
             ];
@@ -115,7 +115,7 @@ class SupervisorController extends AbstractActionController
         $name   = $this->params('name');
 
         $groups = $this->supervisorClient->getGroupConfig();
-        if (!isset($groups[$name])) {
+        if (! isset($groups[$name])) {
             $this->flashMessenger()->addErrorMessage('Group "'.$name.'" not found!');
 
             return $this->redirect()->toRoute('supervisor');
@@ -164,7 +164,7 @@ class SupervisorController extends AbstractActionController
         $form = new ConfirmationForm();
         $form->setData($this->request->getPost());
 
-        if (!$this->request->isPost() || !$form->isValid()) {
+        if (! $this->request->isPost() || ! $form->isValid()) {
             return [
                 'name' => $name,
                 'form' => $form,
@@ -219,7 +219,7 @@ class SupervisorController extends AbstractActionController
         $form = new ConfirmationForm();
         $form->setData($this->request->getPost());
 
-        if (!$this->request->isPost() || !$form->isValid()) {
+        if (! $this->request->isPost() || ! $form->isValid()) {
             return [
                 'name' => $name,
                 'form' => $form,

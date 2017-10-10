@@ -44,7 +44,7 @@ class SupervisorClient extends BaseClient
         foreach ($config as $process) {
             $groupName = $process['group'];
 
-            if (!isset($groups[$groupName])) {
+            if (! isset($groups[$groupName])) {
                 $groups[$groupName] = [
                     'name'      => $groupName,
                     'priority'  => $process['group_prio'],
@@ -118,7 +118,7 @@ class SupervisorClient extends BaseClient
         }
 
         $config = $this->getProcessConfig($name);
-        if (!$config) {
+        if (! $config) {
             return;
         }
 
@@ -136,7 +136,7 @@ class SupervisorClient extends BaseClient
     public function getProcessInfo($processName)
     {
         $fqn = $this->getProcessFQN($processName);
-        if (!$fqn) {
+        if (! $fqn) {
             return;
         }
 
@@ -153,7 +153,7 @@ class SupervisorClient extends BaseClient
     public function getProcessState($name)
     {
         $fqn = $this->getProcessFQN($name);
-        if (!$fqn) {
+        if (! $fqn) {
             return self::PROCESS_STATE_UNKNOWN;
         }
 
@@ -194,7 +194,7 @@ class SupervisorClient extends BaseClient
      */
     public function getProcessInfos(array $names, $reload = false)
     {
-        if ($reload || !$this->processInfo) {
+        if ($reload || ! $this->processInfo) {
             $this->processInfo = $this->getAllProcessInfo();
         }
         $infos = [];
@@ -223,11 +223,12 @@ class SupervisorClient extends BaseClient
      * @param string $method    The method in the namespace
      * @param mixed  $args      Optional arguments
      */
+    // @codingStandardsIgnoreLine
     protected function _doRequest($namespace, $method, $args)
     {
         // Create the authorization header.
         $authorization = '';
-        if (!is_null($this->_username) && !is_null($this->_password)) {
+        if (! is_null($this->_username) && ! is_null($this->_password)) {
             $authorization = "\r\nAuthorization: Basic ".base64_encode($this->_username.':'.$this->_password);
         }
 
